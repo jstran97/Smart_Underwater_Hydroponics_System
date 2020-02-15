@@ -20,10 +20,12 @@
 #include <ESP8266WiFi.h>
 #include <FirebaseArduino.h>
 
-#define WIFI_SSID "NETWORK_NAME_HERE"
-#define WIFI_PASSWORD "NETWORK_PASSWORD_HERE"
-#define FIREBASE_HOST "FIREBASEIO_LINK_HERE"
-#define FIREBASE_AUTH "AUTH_KEY_HERE"
+#define WIFI_SSID "iPhone69 Hotspot"
+#define WIFI_PASSWORD "PACEISCOOL"
+//#define WIFI_SSID "iPhone69 Hotspot"
+//#define WIFI_PASSWORD "PACEISCOOL"
+#define FIREBASE_HOST "lagoon-9de60.firebaseio.com"
+#define FIREBASE_AUTH "aWjHUYVg9d7ZJEqKVW8tgaRHf4WlRt90FxFgze3H"
 
 void setup() {
   Serial.begin(9600);
@@ -43,25 +45,40 @@ void setup() {
 }
 
 int count = 1; // Indicates how many values were updated in database
+int serial_val_count = 1;
 int hum_val = 50;
 int pH_val = 3;
 int temperature = 20;
 String waterLevel_status = "Red";
 
 void loop() {
-  // Update humidity value
-  updateDBValues("/Update/Hum", 89);
+  if (Serial.available()) {
+    //Serial.write(Serial.read());
 
-  // Update pH value
-  updateDBValues("/Update/PH", 4);
+    if (serial_val_count == 1) {
+      // Update humidity value
+      updateDBValues("/Update/Hum", Serial.read());
+      Serial.println("serial_val_count = 1 " + Serial.read());
+      serial_val_count++; // Increase count of received values from serial comm
+    }
+    //else if (serial_val_count == 2) {
+      // Update pH value
+      //updateDBValues("/Update/PH", Serial.read());
+      serial_val_count++; // Increase count of received values from serial comm
+    //}
+    else if (serial_val_count == 2) {
+      // Update temperature value
+      updateDBValues("/Update/Temp", Serial.read());
+      serial_val_count == 1; // Reset to 1
+      Serial.println("serial_val_count = 2 " + Serial.read());
+      
+      count++; // Increase number of values pushed to database
+    }
+    
+  }
   
-  // Update temperature value
-  updateDBValues("/Update/Temp", 54);
-
-  count++; // Increase number of values pushed to database
-
-  //delay(10000); // 10 sec delay
-  delay(300000); // 5 min delay 
+  delay(10000); // 10 sec delay
+  //delay(300000); // 5 min delay 
 }
 
 
@@ -81,13 +98,13 @@ void updateDBValues(String db_path, int sensor_value) {
                                // of database (Date&Time, Humidity, PH, or Temperature)
 
   if (db_path == "/Update/Hum") {
-    newRecord_path = "/Humidity/Humidity";
+    newRecord_path = "/Humidity/H";
   }
   else if (db_path == "/Update/PH") {
-    newRecord_path = "/PH/Ph";
+    newRecord_path = "/PH/P";
   }
   else if (db_path == "/Update/Temp") {
-    newRecord_path = "/Temperature/Temp";
+    newRecord_path = "/Temperature/T";
   }
   
   newRecord_path.concat(count);  // Concatenates string with number var "count"
