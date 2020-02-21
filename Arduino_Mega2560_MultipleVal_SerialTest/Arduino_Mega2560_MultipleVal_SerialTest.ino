@@ -1,27 +1,46 @@
 int count;
 //char rand_str[2];
-//char str[] = "yo";
-String rand_str = "";
-String new_str = "";
+char str[] = "yo";
+//String rand_str = "";
+//String new_str = "";
+
+char test[30];
 
 void setup() {
   //Serial S Begin at 9600 Baud
   Serial1.begin(9600);
-
+  Serial.begin(9600);
 }
 
 void loop() {
   //Write '123' to Serial
-  rand_str = "wtf";
-  new_str = rand_str + ',' + 123 + ','; // string concatentation
-  Serial1.write(new_str); // write string to serial
+  //rand_str = "wtf";
+  //new_str = rand_str + ',' + 123 + ','; // string concatentation
+  //Serial1.write(new_str); // write string to serial
   //Serial1.write(rand_str);
   //Serial1.write(","); // add delimiter to string (to separate values in serial)
   //Serial1.write(123); // write number to serial
+
+  // WORKING METHOD
+  //Serial1.write(str);
+
+  Serial.println("Before sprintf()");
+  Serial.println(123);
+  Serial.println(47);
+  Serial.println(96);
+
+  // sprintf() with 3 ints (does NOT support float, double, and long long) WORKS
+  sprintf(test, "%03d,%03d,%03d", 123, 47, 96);
+  Serial.println("After sprintf() & Before Serial.println(test)");
+  Serial.println(test);
+
+  Serial.println("Before Serial1.write(test)");
+  Serial1.write(test);
+  Serial.println("After Serial1.write(test)");
   delay(1000);
 
   // FAILED METHOD
-  new_str = rand_str + String(',') + String(123) + String(','); // string concatentation
+  //new_str = rand_str + String(',') + String(123) + String(','); // string concatentation
 
   /*
   // put your main code here, to run repeatedly:
