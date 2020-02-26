@@ -3,6 +3,10 @@ int count;
 char str[] = "yo";
 //String rand_str = "";
 //String new_str = "";
+int temp_int = 123;
+float temp_float = 123.4;
+
+
 
 char test[30];
 
@@ -12,7 +16,10 @@ void setup() {
   Serial.begin(9600);
 }
 
-void loop() {
+void loop() {   
+
+
+  
   //Write '123' to Serial
   //rand_str = "wtf";
   //new_str = rand_str + ',' + 123 + ','; // string concatentation
@@ -25,12 +32,12 @@ void loop() {
   //Serial1.write(str);
 
   Serial.println("Before sprintf()");
-  Serial.println(123);
+  Serial.println(temp_float);
   Serial.println(47);
   Serial.println(96);
 
   // sprintf() with 3 ints (does NOT support float, double, and long long) WORKS
-  sprintf(test, "%03d,%03d,%03d", 123, 47, 96);
+  sprintf(test, "%03d.%01d,%03d,%03d", (int)temp_float, (int)(temp_float*100)%100, 47, 96);
   Serial.println("After sprintf() & Before Serial.println(test)");
   Serial.println(test);
 
