@@ -12,8 +12,116 @@ void setup() {
 }
 
 void loop() {
+  
   //data = Serial.read(); //Read the serial data and store it
   //Serial.println(data);
+  
+
+  if (Serial.available()) {
+    numBytes = Serial.available(); // Number of bytes available for reading
+                                   // from serial port
+    char rx_String[numBytes];
+    // Store each byte read into char array
+    for (int i = 0; i < numBytes; i++) {
+      delay(1);
+      rx_String[i] = Serial.read(); 
+    }
+    
+    float rx_Data[6]; // New array to store strings converted to numbers
+    int float_index = 0;
+    //String temp;
+
+    char *ch_ptr = NULL;
+    char *temp_ch_arr[5];
+    byte index = 0;
+  
+    Serial.println("Before rx_String prints");
+    Serial.println(rx_String);
+
+
+    Serial.println("Before 1st ptr = strtok()");
+    ch_ptr = strtok(rx_String, ","); // Look for decimal point (.) delimiter
+    Serial.println(ch_ptr);
+
+    rx_Data[float_index] = atof(ch_ptr); // Convert alphabet to float value (including 
+                                   // decimal point)
+    float_index++;
+    Serial.print("Float #: ");
+    Serial.print(rx_Data[0]);
+    Serial.println(" ");
+    
+    while (ch_ptr != NULL) {
+      // ch_ptr = strtok(NULL, ","); // Look for comma (,) delimiter
+      temp_ch_arr[index] = ch_ptr; // Store char pointer to start of token found
+      ch_ptr = strtok(NULL, ","); // Look for next start of token with comma (,)
+      rx_Data[float_index] = atof(ch_ptr); // Convert alphabet to float value (including 
+                                     // decimal point)
+      
+      
+      /*
+      Serial.print("Data: ");
+      Serial.print(ch_ptr); 
+      Serial.println(" "); 
+      */
+
+      Serial.print("Float #: ");
+      Serial.print(rx_Data[float_index]); 
+      Serial.println(" "); 
+
+      index++; 
+      float_index++;
+    }
+
+/*
+    for (int i = 0; i < 3; i++) {
+      int len = strlen(temp_ch_arr[n]);
+      char ch_Data[len]; 
+
+      for (int j = 0; j < len; len++) {
+        ch_Data[j] = *temp_ch_arr[i];
+        *temp_ch_arr[i]++;
+      }
+    }
+*/
+   for (int i = 0; i < 3; i++) {
+      Serial.print("Strings: ");
+      Serial.print(temp_ch_arr[i]);
+   }
+
+
+   /* for(int i = 0; i < (sizeof(rx_Data)-1); i++){
+      Serial.print("rx_Data: ");
+      Serial.print(rx_Data[i]);
+      Serial.println(" ");
+    }*/
+  
+
+    //Serial.println("Before rx_String prints");
+    //Serial.println(rx_String);
+    //Serial.println("After rx_String prints");
+  }
+
+  delay(1000);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
   /*
     rx_str = Serial.readString(); // Read the incoming data as string
     isMessageReady = true;
@@ -25,6 +133,18 @@ void loop() {
   }
   */
 
+  
+  /*
+    rx_str = Serial.readString(); // Read the incoming data as string
+    isMessageReady = true;
+    Serial.println(rx_str);
+    
+    //rx_ch_arr = Serial.read(); // Read the incoming data as string
+    //Serial.println(rx_ch_arr);
+    delay(1000);
+  }
+  */
+/*
   if (Serial.available()) {
     numBytes = Serial.available(); // Number of bytes available for reading
                                    // from serial port
@@ -50,22 +170,22 @@ void loop() {
                                                            // array using the comma as the cutting point
            //rx_Data[counter] = temp.toFloat(); // Convert string to float
            index = i+1; // Set beginning of next substring
-           /*counter++; // Increment counter for next float value to be stored
+           counter++; // Increment counter for next float value to be stored
 
            Serial.println("rx_Data: ");
            Serial.println(rx_Data[counter]);
-           */
+           
             Serial.println(temp);
        }
       
        
     }
 
-   /* for(int i = 0; i < (sizeof(rx_Data)-1); i++){
+    for(int i = 0; i < (sizeof(rx_Data)-1); i++){
       Serial.print("rx_Data: ");
       Serial.print(rx_Data[i]);
       Serial.println(" ");
-    }*/
+    }
   
 
     //Serial.println("Before rx_String prints");
@@ -74,6 +194,8 @@ void loop() {
   }
 
   delay(1000);
+*/
+  
 /*
   if(Serial.available()){
     rx_String[0] = '\0'; // Reset cstring
