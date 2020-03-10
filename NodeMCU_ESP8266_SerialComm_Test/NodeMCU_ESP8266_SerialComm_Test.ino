@@ -27,21 +27,25 @@ void loop() {
       rx_String[i] = Serial.read(); 
     }
     
-    float rx_Data[6]; // New array to store strings converted to numbers
-    int float_index = 0;
+    float rx_Data[4]; // New array to store strings converted to numbers
+    byte float_index = 0;
     //String temp;
 
     char *ch_ptr = NULL;
     char *temp_ch_arr[5];
     byte index = 0;
+    int temp[3];
   
-    Serial.println("Before rx_String prints");
-    Serial.println(rx_String);
+    //Serial.println("Before rx_String prints");
+    //Serial.println(rx_String);
 
+ 
 
-    Serial.println("Before 1st ptr = strtok()");
-    ch_ptr = strtok(rx_String, ","); // Look for decimal point (.) delimiter
+    
+    //Serial.println("Before 1st ptr = strtok()");
+    ch_ptr = strtok(rx_String, ","); // Look for decimal point (,) delimiter
     Serial.println(ch_ptr);
+    temp_ch_arr[index] = ch_ptr; // Store char pointer to start of token found
 
     rx_Data[float_index] = atof(ch_ptr); // Convert alphabet to float value (including 
                                    // decimal point)
@@ -49,45 +53,55 @@ void loop() {
     Serial.print("Float #: ");
     Serial.print(rx_Data[0]);
     Serial.println(" ");
-    
-    while (ch_ptr != NULL) {
-      // ch_ptr = strtok(NULL, ","); // Look for comma (,) delimiter
-      temp_ch_arr[index] = ch_ptr; // Store char pointer to start of token found
-      ch_ptr = strtok(NULL, ","); // Look for next start of token with comma (,)
-      rx_Data[float_index] = atof(ch_ptr); // Convert alphabet to float value (including 
-                                     // decimal point)
-      
-      
-      /*
-      Serial.print("Data: ");
-      Serial.print(ch_ptr); 
-      Serial.println(" "); 
-      */
-
-      Serial.print("Float #: ");
-      Serial.print(rx_Data[float_index]); 
-      Serial.println(" "); 
-
-      index++; 
-      float_index++;
-    }
 
 /*
-    for (int i = 0; i < 3; i++) {
-      int len = strlen(temp_ch_arr[n]);
+    int temp_count = 0;
+
+    if (
+
+    temp_count++;
+*/
+
+    while (float_index < 3) {
+      delay(1);
+      ch_ptr = strtok(NULL, ","); // Look for next start of token with comma (,)
+      //temp_ch_arr[index] = ch_ptr; // Store char pointer to start of token found
+      rx_Data[float_index] = atof(ch_ptr); // Convert alphabet to float value (including 
+                                     // decimal point)
+      Serial.print("Point: ");
+      Serial.print(atof(ch_ptr) );
+      Serial.println(" ");
+      
+      //Serial.print("Float #: ");
+      //Serial.print(rx_Data[float_index]); 
+      //Serial.println(" "); 
+
+      float_index++;
+
+      //index++; 
+      
+    }
+  
+
+
+    
+/* CHAR ARRAY METHOD (for DATABASE)
+    // Store contents of broken-up string into a new char array
+    for (int i = 0; i < index; i++) {
+      int len = strlen(temp_ch_arr[i]);
       char ch_Data[len]; 
 
-      for (int j = 0; j < len; len++) {
+      for (int j = 0; j < len; j++) {
         ch_Data[j] = *temp_ch_arr[i];
         *temp_ch_arr[i]++;
       }
+
+      // Print strings
+      Serial.print("Strings: ");
+      Serial.print(ch_Data);
+      Serial.println(" ");
     }
 */
-   for (int i = 0; i < 3; i++) {
-      Serial.print("Strings: ");
-      Serial.print(temp_ch_arr[i]);
-   }
-
 
    /* for(int i = 0; i < (sizeof(rx_Data)-1); i++){
       Serial.print("rx_Data: ");
