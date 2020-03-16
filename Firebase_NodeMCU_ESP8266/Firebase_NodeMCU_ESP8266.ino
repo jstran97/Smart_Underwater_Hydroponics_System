@@ -2,10 +2,10 @@
 #include <FirebaseArduino.h>
 #include <ctype.h>
 
-#define WIFI_SSID "will_hs"
-#define WIFI_PASSWORD "lagoon2020"
-#define FIREBASE_HOST "lagoon-9de60.firebaseio.com"
-#define FIREBASE_AUTH "aWjHUYVg9d7ZJEqKVW8tgaRHf4WlRt90FxFgze3H"
+#define WIFI_SSID "NETWORK_NAME_HERE"
+#define WIFI_PASSWORD "NETWORK_PASSWORD_HERE"
+#define FIREBASE_HOST "FIREBASEIO_LINK_HERE"
+#define FIREBASE_AUTH "AUTH_KEY_HERE"
 
 int count = 1; // Indicates how many values were updated in database
 int serial_val_count = 1;
@@ -69,7 +69,7 @@ void loop() {
     Serial.println(" ");
 
 
-     while (float_index < 3) {
+     while (float_index < 4) {
       delay(1);
       ch_ptr = strtok(NULL, ","); // Look for next start of token with comma (,)
       //temp_ch_arr[index] = ch_ptr; // Store char pointer to start of token found
@@ -93,15 +93,18 @@ void loop() {
 
     // Update humidity value
     //updateDBValues("/Update/Hum", (int)rx_Data[1]);
-    updateDBValues("/Update/Hum", rx_Data[0]);
+    updateDBValues("/Update/Hum", rx_Data[1]);
   
     // Update pH value
     //updateDBValues("/Update/PH", (int)rx_Data[0]);
-    updateDBValues("/Update/PH", rx_Data[1]);
+    updateDBValues("/Update/PH", rx_Data[0]);
     
     // Update temperature value
     //updateDBValues("/Update/Temp", (int)rx_Data[2]);
     updateDBValues("/Update/Temp", rx_Data[2]);
+
+    // Update water level status
+    updateDBValues("/Update/WL", rx_Data[3]);
 
 
 
@@ -128,28 +131,32 @@ void updateDBValues(String db_path, float sensor_value) {
   }
   delay(100); 
 
-  String newRecord_path = " "; // Path to new value in one of four upper storage sections
+  // If path is for water level (WL), update Water Level value in DB and 
+  // then exit function
+  if (db_path != "/Update/WL") {
+    String newRecord_path = " "; // Path to new value in one of four upper storage sections
                                // of database (Date&Time, Humidity, PH, or Temperature)
 
-  if (db_path == "/Update/Hum") {
-    newRecord_path = "/Humidity/H";
-  }
-  else if (db_path == "/Update/PH") {
-    newRecord_path = "/PH/P";
-  }
-  else if (db_path == "/Update/Temp") {
-    newRecord_path = "/Temperature/T";
-  }
+    if (db_path == "/Update/Hum") {
+      newRecord_path = "/Humidity/H";
+    }
+    else if (db_path == "/Update/PH") {
+      newRecord_path = "/PH/P";
+    }
+    else if (db_path == "/Update/Temp") {
+      newRecord_path = "/Temperature/T";
+    }
+    
+    newRecord_path.concat(count);  // Concatenates string with number var "count"
   
-  newRecord_path.concat(count);  // Concatenates string with number var "count"
-
-  // set new value for desired path in database, e.g. "/Humidity/Hum"
-  Firebase.setFloat(newRecord_path, sensor_value);
-  // handle error
-  if (Firebase.failed()) {
-      Serial.print("setting " + newRecord_path + " failed:");
-      Serial.println(Firebase.error());  
-      return;
+    // set new value for desired path in database, e.g. "/Humidity/Hum"
+    Firebase.setFloat(newRecord_path, sensor_value);
+    // handle error
+    if (Firebase.failed()) {
+        Serial.print("setting " + newRecord_path + " failed:");
+        Serial.println(Firebase.error());  
+        return;
+    }
   }
   delay(100); 
 
