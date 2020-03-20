@@ -37,14 +37,14 @@ void loop() {
   Serial.println(96);
 
   // sprintf() with 3 ints (does NOT support float, double, and long long) WORKS
-  sprintf(test, "%03d.%01d,%03d,%03d", (int)temp_float, (int)(temp_float*100)%100, 47, 96);
+  sprintf(test, "%03d.%01d,%03d,%03d,%01d", (int)temp_float, (int)(temp_float*100)%100, 47, 96, 0);
   Serial.println("After sprintf() & Before Serial.println(test)");
   Serial.println(test);
 
   Serial.println("Before Serial1.write(test)");
   Serial1.write(test);
   Serial.println("After Serial1.write(test)");
-  delay(1000);
+  delay(10000);
 
   // FAILED METHOD
   //new_str = rand_str + String(',') + String(123) + String(','); // string concatentation
@@ -88,14 +88,3 @@ void loop() {
   }
   */
 }
-
-// Author: RamjetX
-// Link: https://forum.arduino.cc/index.php?topic=89143.0
-void writeString(String stringData) { // Used to serially push out a String with Serial.write()
-
-  for (int i = 0; i < stringData.length(); i++)
-  {
-    Serial.write(stringData[i]);   // Push each char 1 by 1 on each loop pass
-  }
-
-}// end writeString
