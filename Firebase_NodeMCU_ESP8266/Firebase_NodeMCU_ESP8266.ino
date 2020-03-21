@@ -2,10 +2,12 @@
 #include <FirebaseArduino.h>
 #include <ctype.h>
 
+
 #define WIFI_SSID "NETWORK_NAME_HERE"
 #define WIFI_PASSWORD "NETWORK_PASSWORD_HERE"
 #define FIREBASE_HOST "FIREBASEIO_LINK_HERE"
 #define FIREBASE_AUTH "AUTH_KEY_HERE"
+
 
 int count = 1; // Indicates how many values were updated in database
 int serial_val_count = 1;
@@ -34,6 +36,7 @@ void setup() {
 }
 
 void loop() {
+
 
   if (Serial.available()) {
     numBytes = Serial.available(); // Number of bytes available for reading
@@ -107,12 +110,20 @@ void loop() {
     updateDBValues("/Update/WL", rx_Data[3]);
 
 
-
     count++; // Increase number of values pushed to database
 
     delay(1000);
   }
 
+
+  int temp_val = fetchDatafromDB("/Update/WL");
+
+/*
+  Serial.print("Value: ");
+  Serial.print(temp_val);
+  Serial.println(" ");
+*/  
+  
   delay(1000);
   //delay(10000); // 10 sec delay 
   
@@ -160,4 +171,14 @@ void updateDBValues(String db_path, float sensor_value) {
   }
   delay(100); 
 
+}
+
+
+// Retrieve integer data from desired path in DB
+int fetchDatafromDB(String db_path) {
+  int val = Firebase.getInt(db_path); // Obtain integer value from specified DB path
+
+  return val;
+
+  delay(100);
 }
