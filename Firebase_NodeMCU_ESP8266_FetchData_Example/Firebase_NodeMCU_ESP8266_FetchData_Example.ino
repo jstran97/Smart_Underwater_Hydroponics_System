@@ -44,23 +44,5 @@ void loop() {
   Serial.print(val);
   Serial.println(" ");
 
-/*
-  String path = "/";
-  FirebaseObject obj = Firebase.get(path); // Retrieve data from entire database
-
-  // Extract data with respect to different keys using which it is stored???? 
-  String obj_name = obj.getString("Name");
-  String obj_email = obj.getString("Email");
-  String obj_contact = obj.getString("Contact");
-  //String str_val = Firebase.getString(path);
-
-  
-  Serial.println("Strings: ");
-  //Serial.println(obj_name);
-  //Serial.println(obj_email);
-  //Serial.println(obj_contact);
-  Serial.println(str_val);
-  Serial.println(" ");
-*/
   delay(10000);
 }
