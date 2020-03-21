@@ -2,12 +2,10 @@
 #include <FirebaseArduino.h>
 #include <ctype.h>
 
-
 #define WIFI_SSID "NETWORK_NAME_HERE"
 #define WIFI_PASSWORD "NETWORK_PASSWORD_HERE"
 #define FIREBASE_HOST "FIREBASEIO_LINK_HERE"
 #define FIREBASE_AUTH "AUTH_KEY_HERE"
-
 
 int count = 1; // Indicates how many values were updated in database
 int serial_val_count = 1;
