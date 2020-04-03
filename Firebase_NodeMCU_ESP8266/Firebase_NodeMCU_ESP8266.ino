@@ -217,6 +217,7 @@ void updateDBValues(String db_path, String currentDateTime) {
 
 }
 
+
 // Retrieve integer data from desired path in DB
 int fetchDatafromDB(String db_path) {
   //if (!Firebase.failed()) {
@@ -237,8 +238,19 @@ int fetchDatafromDB(String db_path) {
   //} 
 }
 
+
 // Obtain current date using NTP Client-Server
 String getCurrentDate() {
+  /*****************************************************************
+  *    Title: ESP8266 NodeMCU NTP Client-Server: Get Date and Time
+  *           (Arduino IDE)
+  *    Author: Random Nerd Tutorials Staff
+  *    Date: March 2020
+  *    Code version: N/A
+  *    Availability: 
+  *           https://randomnerdtutorials.com/esp8266-nodemcu-date-time-ntp-client-server-arduino/
+  *
+  ******************************************************************/
   unsigned long epochTime = timeClient.getEpochTime();
 
   //Get a time structure
@@ -257,8 +269,19 @@ String getCurrentDate() {
   return currentDate;
 }
 
+
 // Obtain current time using NTP Client-Server
 String getCurrentTime() {
+  /*****************************************************************
+  *    Title: ESP8266 NodeMCU NTP Client-Server: Get Date and Time
+  *           (Arduino IDE)
+  *    Author: Random Nerd Tutorials Staff
+  *    Date: March 2020
+  *    Code version: N/A
+  *    Availability: 
+  *           https://randomnerdtutorials.com/esp8266-nodemcu-date-time-ntp-client-server-arduino/
+  *
+  ******************************************************************/
   // Current hour and minutes (in military time)
   String current_hours_min = String(timeClient.getHours()) + ":" +
         String(timeClient.getMinutes());
