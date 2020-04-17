@@ -21,7 +21,7 @@ int numBytes;
 //const long utcOffsetInSeconds = -28800; // UTC-8:00 PST
 const long utcOffsetInSeconds = -25200; // UTC-7:00 PST (for Daylight Savings)
 
-// Define NTP Client to get time
+// Define NTP Client to get date and time
 WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "north-america.pool.ntp.org", utcOffsetInSeconds);
 
@@ -66,6 +66,8 @@ void loop() {
       delay(1);
       rx_String[i] = Serial.read(); // Store each char of string received
     }
+
+    clearIncomingBuffer(); // Empty incoming serial data buffer (from Mega2560)
     
     float rx_Data[4]; // New array to store strings converted to numbers
     int float_index = 0;
@@ -90,7 +92,7 @@ void loop() {
     Serial.print(rx_Data[0]);
     Serial.println(" ");
 
-     while (float_index < 4) {
+    while (float_index < 4) {
       delay(1);
       ch_ptr_rcv = strtok(NULL, ","); // Look for next start of token with comma (,)
       //temp_ch_arr[index] = ch_ptr_rcv; // Store char pointer to start of token found
@@ -115,15 +117,12 @@ void loop() {
     updateDBValues("/Date&Time/DT", getCurrentDate());
     
     // Update humidity value
-    //updateDBValues("/Update/Hum", (int)rx_Data[1]);
     updateDBValues("/Update/Hum", rx_Data[1]);
   
     // Update pH value
-    //updateDBValues("/Update/PH", (int)rx_Data[0]);
     updateDBValues("/Update/PH", rx_Data[0]);
     
     // Update temperature value
-    //updateDBValues("/Update/Temp", (int)rx_Data[2]);
     updateDBValues("/Update/Temp", rx_Data[2]);
 
     // Update water level status
@@ -136,15 +135,18 @@ void loop() {
   }
 
   delay(1000);
-  //delay(10000); // 10 sec delay 
   
 }
 
 
 
 
-
-// Update the humidity, pH, and temperature values in real-time database
+/*
+ * Name: Update Database (DB) Values
+ * Date Last Updated: January 13, 2020
+ * Description: Update the humidity, pH, and temperature values in the 
+ *              database via real-time
+ */
 void updateDBValues(String db_path, float sensor_value) {
   // set value in Update path of database, e.g. "/Update/Hum"
   Firebase.setFloat(db_path, sensor_value);
@@ -159,8 +161,9 @@ void updateDBValues(String db_path, float sensor_value) {
   // If path is for water level (WL), update Water Level value in DB and 
   // then exit function
   if (db_path != "/Update/WL") {
-    String newRecord_path = " "; // Path to new value in one of four upper storage sections
-                               // of database (Humidity, PH, Temperature, or WL)
+    String newRecord_path = " "; // Path to new value in one of four upper 
+                                 // storage sections of database 
+                                 // (Humidity, PH, Temperature, or WL)
 
     if (db_path == "/Update/Hum") {
       newRecord_path = "/Humidity/H";
@@ -188,7 +191,12 @@ void updateDBValues(String db_path, float sensor_value) {
 }
 
 
-// Update the date and time in real-time database
+/*
+ * Name: Update Database (DB) Values
+ * Date Last Updated: April 3, 2020
+ * Description: Update the current time and date in the database 
+ *              via real-time
+ */
 void updateDBValues(String db_path, String currentDateTime) {
   int path = 1;
 
@@ -215,10 +223,16 @@ void updateDBValues(String db_path, String currentDateTime) {
     path++; // Move to second path /Date&Time/DT#/Time
   }
 
+  delay(100);
 }
 
 
-// Retrieve integer data from desired path in DB
+/*
+ * Name: Fetch Data from Database (DB)
+ * Date Last Updated: March 21, 2020
+ * Description: Retrieve an integer value by using the desired path to 
+ *              navigate through the database 
+ */
 int fetchDatafromDB(String db_path) {
   //if (!Firebase.failed()) {
     int val = Firebase.getInt(db_path); // Obtain integer value from specified DB path
@@ -239,7 +253,11 @@ int fetchDatafromDB(String db_path) {
 }
 
 
-// Obtain current date using NTP Client-Server
+/*
+ * Name: Get Current Date
+ * Date Last Updated: April 3, 2020
+ * Description: Obtain current date using NTP Client-Server
+ */
 String getCurrentDate() {
   /*****************************************************************
   *    Title: ESP8266 NodeMCU NTP Client-Server: Get Date and Time
@@ -270,7 +288,11 @@ String getCurrentDate() {
 }
 
 
-// Obtain current time using NTP Client-Server
+/*
+ * Name: Get Current Time
+ * Date Last Updated: April 3, 2020
+ * Description: Obtain current time using NTP Client-Server
+ */
 String getCurrentTime() {
   /*****************************************************************
   *    Title: ESP8266 NodeMCU NTP Client-Server: Get Date and Time
@@ -289,4 +311,18 @@ String getCurrentTime() {
   delay(100);
 
   return current_hours_min;
+}
+
+
+/*
+ * Name: Clear Incoming Buffer
+ * Date Last Updated: April 16, 2020
+ * Description: Empty incoming or received data buffer via 
+ *              serial communication
+ */
+void clearIncomingBuffer() {
+  while(Serial.available()) {
+      Serial.read();
+    }
+  delay(100);
 }
