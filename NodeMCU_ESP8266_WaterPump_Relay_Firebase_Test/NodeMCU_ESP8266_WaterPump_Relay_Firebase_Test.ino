@@ -55,6 +55,8 @@ void setup() {
   //digitalWrite(pin_WATER_PUMP_RELAY, HIGH);
   //digitalWrite(pin_WaterPumpRelay, HIGH);
 
+  Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
+
   timeClient.begin();
 }
 
