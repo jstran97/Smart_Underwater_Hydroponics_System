@@ -4,11 +4,10 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-
-#define WIFI_SSID ""
-#define WIFI_PASSWORD ""
-#define FIREBASE_HOST "lagoon-9de60.firebaseio.com"
-#define FIREBASE_AUTH ""
+#define WIFI_SSID "NETWORK_NAME_HERE"
+#define WIFI_PASSWORD "NETWORK_PASSWORD_HERE"
+#define FIREBASE_HOST "FIREBASEIO_LINK_HERE"
+#define FIREBASE_AUTH "AUTH_KEY_HERE"
 
 const unsigned long ONE_SECOND                  = 1000UL;
 const unsigned long ONE_MINUTE                  = 60UL * ONE_SECOND;
@@ -35,7 +34,7 @@ int pump_con;
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(115200);
+  Serial.begin(9600);
   //Serial1.begin(115200);
 
   // connect to Wi-Fi
