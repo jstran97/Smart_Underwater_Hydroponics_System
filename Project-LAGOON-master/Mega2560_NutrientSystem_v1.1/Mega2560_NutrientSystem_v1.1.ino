@@ -39,16 +39,15 @@ void loop()
   int humd = myHumidity.readHumidity(); // Read current humidity
   int temp = myHumidity.readTemperature(); // Read current temperature (in C)
   int water_level = 0;
-  
   float pH_val = obtain_pHValue(); // Read pH measurement from sensor
 
   // Places all sensor values into a string with a comma (,) delimiter
   sprintf(tx_Str, "%03d.%01d,%03d,%03d,%01d", (int)pH_val, 
     (int)(pH_val*100)%100, humd, temp, water_level);
-  
-  Serial.println(tx_Str);
 
-  Serial1.write(tx_Str);
+  Serial.println(tx_Str);
+  
+  Serial1.write(tx_Str); // Send data to ESP8266 via serial communication
 
   Serial.flush();
   unsigned long millis_FlushStop = millis();
@@ -56,8 +55,8 @@ void loop()
   Serial.print(millis_FlushStop - millis_FlushStart);
   Serial.println(" milliseconds");
  
-  //delay(1000);
-  delay(10000); // Delay for 10 seconds
+  delay(1000);
+  //delay(10000); // Delay for 10 seconds
   //delay(FIFTEEN_MINUTES); // Delay for 15 minutes
 }
 
