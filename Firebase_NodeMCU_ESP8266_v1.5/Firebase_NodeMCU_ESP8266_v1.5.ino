@@ -16,12 +16,6 @@ int numBytes;
 //const long utcOffsetInSeconds = -28800; // UTC-8:00 PST
 const long utcOffsetInSeconds = -25200; // UTC-7:00 PST (for Daylight Savings)
 
-// DELETE THESE 4 VARIABLES (BELOW) LATER!!!
-int hum_val = 81;
-int pH_val = 2;
-int temperature = 99; // in degrees Celsius
-int waterLevel_status = 0;
-
 const unsigned long ONE_SECOND                  = 1000UL;
 const unsigned long ONE_MINUTE                  = 60UL * ONE_SECOND;
 const unsigned long FIVE_MINUTES                = 5UL * 60UL * ONE_SECOND;
@@ -39,7 +33,8 @@ int current_hour; // Current hour (in military time)
 int current_min; // Current minute
 int pump_control; // Current pump control value retrieved from Firebase
 
-
+bool isDoneOnce = false; // Used to limit number of times sensor data is transmitted
+                         // to Firebase for each minute to one time only
 
 // Define NTP Client to get date and time
 WiFiUDP ntpUDP;
@@ -66,10 +61,12 @@ void setup() {
   setPumpState(WATER_PUMP_OFF);
   //digitalWrite(pin_WATER_PUMP_RELAY, HIGH);
   //digitalWrite(pin_WaterPumpRelay, HIGH);
-
   
   Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH); // Connect to Firebase
   timeClient.begin(); // Connect to NTP server for date and time
+
+  isDoneOnce = false; // Allows for one sensor data transmission to Firebase 
+                      // every 15 minutes
 }
 
 void loop() {
@@ -117,7 +114,7 @@ void loop() {
   }
   
   // Obtain data from Mega 2560 board every 15 minutes (0, 15, 30, 45 minute mark)
-  if (current_min % 15 == 0) {
+  if (current_min % 15 == 0 && isDoneOnce == false) {
     //interrupt mega to take sensor data
     // => ASSUMPTION: place SERIAL COMM CODE HERE
     Serial.println("(current_min % 15 == 0 branch) => Need to obtain data from MEGA2560");
@@ -125,7 +122,15 @@ void loop() {
     // Check if there is data within the serial communications data buffer
     if (Serial.available()) {
       sendMegaDataToDB(); // Fetch Mega2560 data and send them to database
+
+      isDoneOnce = true; // Makes this transmission of sensor data to Firebase
+                         // occur only one time
     }
+  }
+  // If minute hand on clock is not at 15, 30, 45, or 0 minute mark, then 
+  // reset number of transmissions of sensor data back to 1 time (from 0)
+  else if (current_min % 15 != 0) {
+    isDoneOnce = false; 
   }
 
   Serial.println(" ");
@@ -202,7 +207,6 @@ void sendMegaDataToDB() {
 
   // Update water level status
   updateDBValues("/Update/WL", rx_Data[3]);
-
 
   count++; // Increase number of values pushed to database
 
