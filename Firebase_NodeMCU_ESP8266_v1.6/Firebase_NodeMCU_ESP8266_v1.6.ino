@@ -4,20 +4,10 @@
 #include <NTPClient.h>
 #include <WiFiUdp.h>
 
-/*
 #define WIFI_SSID "NETWORK_NAME_HERE"
 #define WIFI_PASSWORD "NETWORK_PASSWORD_HERE"
 #define FIREBASE_HOST "FIREBASEIO_LINK_HERE"
 #define FIREBASE_AUTH "AUTH_KEY_HERE"
-*/
-/*
-#define WIFI_SSID "DVSQ"
-#define WIFI_PASSWORD "1234abcd567efg"
-*/
-#define WIFI_SSID "NETGEAR02"
-#define WIFI_PASSWORD "pasteldiamond934"
-#define FIREBASE_HOST "lagoon-9de60.firebaseio.com"
-#define FIREBASE_AUTH "aWjHUYVg9d7ZJEqKVW8tgaRHf4WlRt90FxFgze3H"
 
 int count; // Indicates how many values were updated in database
 char pump_str[1];
