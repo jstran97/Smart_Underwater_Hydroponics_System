@@ -1,4 +1,4 @@
-**Smart Underwater Hydroponics System**
+# Smart Underwater Hydroponics System
 A smart system
 1) where plants can be grown without soil due to having access to nutrient-enriched water,
 2) whose plants' watering cycle can be controlled via water motors, Internet of Things (IoT) Connectivity, and a mobile application, and
